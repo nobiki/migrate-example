@@ -1,0 +1,2 @@
+CREATE USER IF NOT EXISTS tenancy@'%' IDENTIFIED BY 'someRandomPassword';
+GRANT ALL PRIVILEGES ON *.* TO tenancy@'%' WITH GRANT OPTION;
