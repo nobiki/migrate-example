@@ -1,8 +1,8 @@
-FROM bitnami/laravel:11.2.1
+FROM bitnami/laravel:11
 WORKDIR /opt/bitnami/laravel
 
 ## Install tenancy package
-RUN composer require stancl/tenancy:"v3.8.5"
+RUN composer require stancl/tenancy
 
 ## Add Settings
 ADD files/ /tmp/files/
