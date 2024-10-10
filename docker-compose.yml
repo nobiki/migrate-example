@@ -8,7 +8,7 @@ services:
   #     - ./migrations:/migrations
   #   entrypoint: [ "migrate", "-path", "/migrations", "-database", "mysql://test:test@tcp(localhost:3306)/test"]
 
-  laravel:
+  artisan:
     build:
       context: ./laravel
     network_mode: "host"
@@ -20,7 +20,7 @@ services:
       - DB_DATABASE=test
       - DB_USERNAME=tenancy
       - DB_PASSWORD=someRandomPassword
-    entrypoint: [ "/entrypoint.sh" ]
+    entrypoint: [ "php","artisan" ]
 
   db:
     image: mysql:8

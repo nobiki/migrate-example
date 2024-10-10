@@ -13,14 +13,14 @@ class Tenancy extends Command
      *
      * @var string
      */
-    protected $signature = 'app:tenancy';
+    protected $signature = 'app:tenancy {arg1} {arg2?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = "Tenant Operations [create-tenant, delete-tenant] [TENANT_ID]";
 
     public function __construct(Tenant $tenant, User $user)
     {
@@ -35,15 +35,38 @@ class Tenancy extends Command
      */
     public function handle()
     {
-        $tenant1 = $this->tenant->create(['id' => 'foo']);
-        $tenant1->domains()->create(['domain' => 'foo.localhost']);
+        # Argument Validation
+        if(preg_match("/^(create-tenant|delete-tenant)$/", $this->argument("arg1"))) {
+            $action        = $this->argument("arg1");
+        } else {
+            $this->info("Invalid argument");
+            return false;
+        }
 
-        $tenant2 = $this->tenant->create(['id' => 'bar']);
-        $tenant2->domains()->create(['domain' => 'bar.localhost']);
+        if(preg_match("/^[a-zA-Z0-9]+$/", $this->argument("arg2"))) {
+            $tenant_id     = $this->argument("arg2");
+            $tenant_domain = $this->argument("arg2").".localhost";
+        } else {
+            $this->info("Invalid argument");
+            return false;
+        }
 
-        $this->tenant->all()->runForEach(function () {
-            $this->user->factory()->create();
-        });
+        # Tenant Operation
+        switch($action) {
+            case 'create-tenant':
+                $tenant = $this->tenant->create(['id' => $tenant_id]);
+                $tenant->domains()->create(['domain' => $tenant_domain]);
+                $this->info("テナント「{$tenant_id}」を登録し、データベース「tenant{$tenant_id}」を作成しました");
+                break;
+            case 'delete-tenant':
+                $tenant = $this->tenant->find($tenant_id);
+                $tenant->delete();
+                $this->info("テナント「{$tenant_id}」の登録を削除し、データベース「tenant{$tenant_id}」を削除しました");
+                break;
+            default:
+                $this->info("Invalid action");
+                return false;
+        }
     }
 }
 
