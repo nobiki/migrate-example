@@ -15,7 +15,7 @@ docker compose build artisan
 Create tables `tenants` and `domains`
 
 ```
-# docker compose run --rm artisan php artisan migrate
+# docker compose run --rm artisan migrate
 
    INFO  Preparing database.
 
