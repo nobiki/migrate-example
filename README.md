@@ -78,6 +78,11 @@ Tenant: foo
 Tenant: foo
 
    INFO  Nothing to migrate.
+
+Tenant: bar
+
+   INFO  Nothing to migrate.
+
 ```
 
 Rollback
